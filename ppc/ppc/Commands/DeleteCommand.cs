@@ -20,14 +20,14 @@ namespace ppc.Commands
         public void Execute()
         {
             _oldPriorityLevel = CpuPriorityOptionsWorker.Delete(_key);
-            Console.WriteLine($"Launch settings have been deleted for {_key}" +
+            Console.WriteLine($"Startup settings have been deleted for '{_key}'" +
                 $" with priority level: {_oldPriorityLevel}");
         }
 
         public void Undo()
         {
             CpuPriorityOptionsWorker.Create(_key, _oldPriorityLevel);
-            Console.WriteLine($"Deleting startup settings for {_key} canceled");
+            Console.WriteLine($"Deleting startup settings for '{_key}' canceled");
         }
     }
 }

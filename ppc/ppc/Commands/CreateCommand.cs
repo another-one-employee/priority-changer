@@ -18,7 +18,7 @@ namespace ppc.Commands
 
             if (priorityLevel < 1 || priorityLevel > 6)
             {
-                throw new ArgumentException("Wrong priority level");
+                throw new ArgumentException($"Wrong priority level: {priorityLevel}");
             }
 
             _priorityLevel = (CpuPriorityLevel)priorityLevel;
@@ -27,14 +27,14 @@ namespace ppc.Commands
         public void Execute()
         {
             CpuPriorityOptionsWorker.Create(_key, _priorityLevel);
-            Console.WriteLine($"Startup settings have been created for {_key}" +
-                $" with priority level {_priorityLevel}");
+            Console.WriteLine($"Startup settings have been created for '{_key}'" +
+                $" with priority level: {_priorityLevel}");
         }
 
         public void Undo()
         {
             CpuPriorityOptionsWorker.Delete(_key);
-            Console.WriteLine($"Creation of settings for {_key} has been canceled");
+            Console.WriteLine($"Creation of settings for '{_key}' has been canceled");
         }
     }
 }

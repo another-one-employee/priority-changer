@@ -28,14 +28,14 @@ namespace ppc.Commands
         public void Execute()
         {
             _oldPriorityLevel = CpuPriorityOptionsWorker.Update(_key, _priorityLevel);
-            Console.WriteLine($"Priority level for {_key}" +
+            Console.WriteLine($"Priority level for '{_key}'" +
                 $" update from {_oldPriorityLevel} to {_priorityLevel}");
         }
 
         public void Undo()
         {
             CpuPriorityOptionsWorker.Update(_key, _oldPriorityLevel);
-            Console.WriteLine($"Update for {_key} has been canceled." +
+            Console.WriteLine($"Update for '{_key}' has been canceled." +
                 $" Сurrent priority level: {_oldPriorityLevel}");
         }
     }
