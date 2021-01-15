@@ -16,7 +16,7 @@ namespace ppc
 
             if (perfOptions == null)
             {
-                throw new ArgumentException("Key not found");
+                throw new ArgumentException($"Key: '{key}' not found");
             }
 
             return perfOptions;
@@ -29,7 +29,7 @@ namespace ppc
 
             if (keyValue == null)
             {
-                throw new ArgumentException("CpuPriorityClass not found");
+                throw new ArgumentException($"CpuPriorityClass not found in '{key}'");
             }
 
             Int32.TryParse(keyValue.ToString(), out int oldPriorityLevel);
@@ -55,37 +55,19 @@ namespace ppc
 
         public static CpuPriorityLevel Delete(string key)
         {
-            var priorityLevel = CpuPriorityLevel.Normal;
-
-            try
-            {
-                priorityLevel = GetCpuPriorityLevel(key);
-                _workingKey.DeleteSubKeyTree(key, true);
-            }
-            catch (ArgumentException ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+            var priorityLevel = GetCpuPriorityLevel(key);
+            _workingKey.DeleteSubKeyTree(key, true);
 
             return priorityLevel;
         }
 
         public static CpuPriorityLevel Update(string key, CpuPriorityLevel priorityLevel)
         {
-            var oldPriorityLevel = CpuPriorityLevel.Normal;
-
-            try
-            {
-                oldPriorityLevel = GetCpuPriorityLevel(key);
-
-                RegistryKey perfOptions = _workingKey.OpenSubKey(key + @"\PerfOptions", true);
-                perfOptions.SetValue("CpuPriorityClass", priorityLevel, RegistryValueKind.DWord);
-                perfOptions.Close();
-            }
-            catch (ArgumentException ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+            var oldPriorityLevel = GetCpuPriorityLevel(key);
+            
+            RegistryKey perfOptions = _workingKey.OpenSubKey(key + @"\PerfOptions", true);
+            perfOptions.SetValue("CpuPriorityClass", priorityLevel, RegistryValueKind.DWord);
+            perfOptions.Close();
 
             return oldPriorityLevel;
         }
