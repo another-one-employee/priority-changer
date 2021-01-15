@@ -23,9 +23,22 @@ namespace ppc
             {
                 case "c":
                 case "create":
-                    level = CpuLevelStringToInt(args.Last());
+                    if (!TryParseCpuLevelStringToInt(args.Last(), out level))
+                    {
+                        Console.WriteLine($"Unknown priority level: '{args.Last()}'");
+                        return;
+                    }
                     key = ExtractingKeyFromArguments(args, 1, 1);
-                    invoker.SetCommand(new CreateCommand(key, level));
+
+                    try
+                    {
+                        invoker.SetCommand(new CreateCommand(key, level));
+                    }
+                    catch(ArgumentException ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                        return;
+                    }
                     break;
 
                 case "r":
@@ -35,9 +48,22 @@ namespace ppc
 
                 case "u":
                 case "update":
-                    level = CpuLevelStringToInt(args.Last());
+                    if (!TryParseCpuLevelStringToInt(args.Last(), out level))
+                    {
+                        Console.WriteLine($"Unknown priority level: '{args.Last()}'");
+                        return;
+                    }
                     key = ExtractingKeyFromArguments(args, 1, 1);
-                    invoker.SetCommand(new UpdateCommand(key, level));
+
+                    try
+                    {
+                        invoker.SetCommand(new UpdateCommand(key, level));
+                    }
+                    catch(ArgumentException ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                        return;
+                    }
                     break;
 
                 case "d":
@@ -55,18 +81,29 @@ namespace ppc
                     break;
             }
 
-            invoker.Run();
+            try
+            {
+                invoker.Run();
+            }
+            catch(ArgumentException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
-        private static int CpuLevelStringToInt(string value)
+        private static bool TryParseCpuLevelStringToInt(string value, out int result)
         {
-            int level;
-            if (!Int32.TryParse(value, out level))
+            CpuPriorityLevel temp;
+            if (Enum.TryParse(value, true, out temp))
             {
-                level = (int)Enum.Parse(typeof(CpuPriorityLevel), value);
+                result = (int)temp;
+                return true;
             }
-
-            return level;
+            else
+            {
+                result = 0;
+                return false;
+            }
         }
 
         private static string ExtractingKeyFromArguments(string[] args, int countOfCommandWords, int countOfOtherArgs)
