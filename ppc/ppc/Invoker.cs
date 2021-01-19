@@ -1,10 +1,16 @@
-﻿using System.Collections.Generic;
-using ppc.Commands;
+﻿using ppc.Commands;
+using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace ppc
 {
+    [DataContract]
+    [KnownType(typeof(CreateCommand))]
+    [KnownType(typeof(DeleteCommand))]
+    [KnownType(typeof(UpdateCommand))]
     class Invoker
     {
+        [DataMember]
         private Stack<ICommand> _history;
         private ICommand _command;
 
