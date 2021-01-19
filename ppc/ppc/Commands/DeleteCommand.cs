@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace ppc.Commands
 {
+    [DataContract]
     class DeleteCommand : ICancelable
     {
+        [DataMember]
         private string _key;
+        [DataMember]
         private CpuPriorityLevel _oldPriorityLevel;
 
         public DeleteCommand(string key)

@@ -1,12 +1,16 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace ppc.Commands
 {
+    [DataContract]
     class UpdateCommand : ICancelable
     {
+        [DataMember]
         private string _key;
-        private CpuPriorityLevel _priorityLevel;
+        [DataMember]
         private CpuPriorityLevel _oldPriorityLevel;
+        private CpuPriorityLevel _priorityLevel;
 
         public UpdateCommand(string key, int priorityLevel)
         {

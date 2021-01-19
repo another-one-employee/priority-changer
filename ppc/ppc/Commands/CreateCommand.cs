@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace ppc.Commands
 {
+    [DataContract]
     class CreateCommand : ICancelable
     {
+        [DataMember]
         private string _key;
+        [DataMember]
         private CpuPriorityLevel _priorityLevel;
 
         public CreateCommand(string key, int priorityLevel)
