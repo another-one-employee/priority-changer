@@ -1,6 +1,8 @@
 ﻿using ppc.Commands;
 using System;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace ppc
 {
@@ -15,7 +17,30 @@ namespace ppc
                 return;
             }
 
-            Invoker invoker = new Invoker();
+            Invoker invoker = null;
+            try
+            {
+                invoker = ReadInvoker();
+            }
+            catch (SerializationException serExc)
+            {
+                Console.WriteLine("Serialization Failed");
+                Console.WriteLine(serExc.Message);
+            }
+            catch (Exception exc)
+            {
+                Console.WriteLine(
+                "The read history of commands from 'ppc.history.xml' failed: {0} StackTrace: {1}",
+                exc.Message, exc.StackTrace);
+            }
+            finally
+            {
+                if (invoker == null)
+                {
+                    invoker = new Invoker();
+                }
+            }
+
             int level;
             string key;
 
@@ -89,6 +114,8 @@ namespace ppc
             {
                 Console.WriteLine(ex.Message);
             }
+
+            WriteInvoker(invoker);
         }
 
         private static bool TryParseCpuLevelStringToInt(string value, out int result)
@@ -113,6 +140,24 @@ namespace ppc
                 .Skip(countOfCommandWords);
 
             return String.Join(" ", temp);
+        }
+
+        private static Invoker ReadInvoker()
+        {
+            using (FileStream reader = new FileStream("ppc.history.xml", FileMode.Open))
+            {
+                DataContractSerializer serializer = new DataContractSerializer(typeof(Invoker));
+                return (Invoker)serializer.ReadObject(reader);
+            }
+        }
+
+        private static void WriteInvoker(Invoker invoker)
+        {
+            using (FileStream writer = new FileStream("ppc.history.xml", FileMode.Create))
+            {
+                DataContractSerializer serializer = new DataContractSerializer(typeof(Invoker));
+                serializer.WriteObject(writer, invoker);
+            }
         }
     }
 }
