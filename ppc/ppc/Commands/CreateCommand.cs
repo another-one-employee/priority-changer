@@ -25,6 +25,12 @@ namespace ppc.Commands
                 throw new ArgumentException($"Wrong priority level: {priorityLevel}");
             }
 
+            if (priorityLevel == 4)
+            {
+                throw new ArgumentException("The level cannot be RealTime, " +
+                    "because the system will detect it as Normal");
+            }
+
             _priorityLevel = (CpuPriorityLevel)priorityLevel;
         }
 
