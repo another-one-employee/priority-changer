@@ -36,9 +36,7 @@ namespace ppc
 
             if (oldPriorityLevel < 1 || oldPriorityLevel > 6)
             {
-                oldPriorityLevel = 2;
-                Console.WriteLine("Failed to get old level priority value" + "\n"
-                    + "When undoing this operation, the value will be set to Normal");
+                throw new ArgumentException($"Failed to get old level priority value from: '{oldPriorityLevel}'");
             }
 
             return (CpuPriorityLevel)oldPriorityLevel;
