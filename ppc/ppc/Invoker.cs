@@ -1,4 +1,5 @@
-﻿using ppc.Commands;
+﻿using System;
+using ppc.Commands;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
@@ -35,7 +36,14 @@ namespace ppc
 
         public void Undo()
         {
-            _command = _history.Pop();
+            try
+            {
+                _command = _history.Pop();
+            }
+            catch(InvalidOperationException)
+            {
+                throw new InvalidOperationException("History commands is empty");
+            }
             var command = _command as ICancelable;
             command.Undo();
         }

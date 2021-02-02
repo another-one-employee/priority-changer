@@ -27,6 +27,10 @@ namespace ppc
                 Console.WriteLine("Serialization Failed");
                 Console.WriteLine(serExc.Message);
             }
+            catch(FileNotFoundException)
+            {
+                Console.WriteLine("Started recording command history in 'ppc.history.xml'");
+            }
             catch (Exception exc)
             {
                 Console.WriteLine(
@@ -98,9 +102,19 @@ namespace ppc
                     break;
 
                 case "undo":
-                    invoker.Undo();
+                    try
+                    {
+                        invoker.Undo();
+                    }
+                    catch(InvalidOperationException ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                    WriteInvoker(invoker);
                     return;
 
+                case "h":
+                case "help":
                 default:
                     invoker.SetCommand(new HelpCommand());
                     break;
