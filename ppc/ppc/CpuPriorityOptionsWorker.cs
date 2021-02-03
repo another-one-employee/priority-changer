@@ -70,7 +70,7 @@ namespace ppc
             return oldPriorityLevel;
         }
 
-        public static Dictionary<string, CpuPriorityLevel> ReadAll()
+        public static Dictionary<string, string> ReadAll()
         {
             return _workingKey
                 .GetSubKeyNames()
@@ -79,7 +79,27 @@ namespace ppc
                     .OpenSubKey(subKey + @"\PerfOptions")
                     .GetValueNames()
                     .Contains("CpuPriorityClass"))
-                .Select(s => Tuple.Create(s, GetCpuPriorityLevel(s)))
+                .Select(s =>
+                {
+                    string cpuLvl = null;
+                    try
+                    {
+                        cpuLvl = GetCpuPriorityLevel(s).ToString();
+                    }
+                    catch(ArgumentException ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                    finally
+                    {
+                        if (cpuLvl == null)
+                        {
+                            cpuLvl = "Undefined";
+                        }
+                    }
+
+                    return Tuple.Create(s, cpuLvl);
+                })
                 .ToDictionary(key => key.Item1, value => value.Item2);
         }
     }
