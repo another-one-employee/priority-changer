@@ -33,5 +33,10 @@ namespace ppc.Commands
             CpuPriorityOptionsWorker.Create(_key, _oldPriorityLevel);
             Console.WriteLine($"Deleting startup settings for '{_key}' canceled");
         }
+
+        public override string ToString()
+        {
+            return $"Command: Delete\nKey: {_key}\nOld priority level: {_oldPriorityLevel}";
+        }
     }
 }

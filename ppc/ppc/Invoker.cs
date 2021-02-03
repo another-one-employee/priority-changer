@@ -25,6 +25,11 @@ namespace ppc
             _command = command;
         }
 
+        public ICommand GetCommand()
+        {
+            return _command;
+        }
+
         public void Run()
         {
             _command.Execute();

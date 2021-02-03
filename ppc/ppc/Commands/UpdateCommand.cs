@@ -48,5 +48,10 @@ namespace ppc.Commands
             Console.WriteLine($"Update for '{_key}' has been canceled." +
                 $" Сurrent priority level: {_oldPriorityLevel}");
         }
+
+        public override string ToString()
+        {
+            return $"Command: Update\nKey: {_key}\nOld priority level: {_oldPriorityLevel}";
+        }
     }
 }

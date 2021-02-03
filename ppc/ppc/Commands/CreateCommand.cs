@@ -46,5 +46,10 @@ namespace ppc.Commands
             CpuPriorityOptionsWorker.Delete(_key);
             Console.WriteLine($"Creation of settings for '{_key}' has been canceled");
         }
+
+        public override string ToString()
+        {
+            return $"Command: Create\nKey: {_key}\nPriority level: {_priorityLevel}";
+        }
     }
 }

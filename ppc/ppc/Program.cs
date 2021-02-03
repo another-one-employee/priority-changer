@@ -110,6 +110,12 @@ namespace ppc
                     {
                         Console.WriteLine(ex.Message);
                     }
+                    catch(ArgumentException ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                        Console.WriteLine("Failed to cancel command");
+                        Console.WriteLine(invoker.GetCommand().ToString());
+                    }
                     WriteInvoker(invoker);
                     return;
 
