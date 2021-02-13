@@ -46,7 +46,7 @@ namespace ppc.Commands
         {
             CpuPriorityOptionsWorker.Update(_key, _oldPriorityLevel);
             Console.WriteLine($"Update for '{_key}' has been canceled." +
-                $" Сurrent priority level: {_oldPriorityLevel}");
+                $" Current priority level: {_oldPriorityLevel}");
         }
 
         public override string ToString()
