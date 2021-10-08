@@ -88,7 +88,7 @@ namespace ppc
                     }
                     catch(ArgumentException ex)
                     {
-                        Console.WriteLine(ex.Message);
+                        cpuLvl = ex.Message;
                     }
                     finally
                     {
