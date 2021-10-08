@@ -121,8 +121,11 @@ namespace ppc
 
                 case "h":
                 case "help":
-                default:
                     invoker.SetCommand(new HelpCommand());
+                    break;
+
+                default:
+                    Console.WriteLine($"'{args.First()}' is not a command. See '<program-name> help'.");
                     break;
             }
 
