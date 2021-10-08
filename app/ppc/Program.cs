@@ -126,7 +126,7 @@ namespace ppc
 
                 default:
                     Console.WriteLine($"'{args.First()}' is not a command. See '<program-name> help'.");
-                    break;
+                    return;
             }
 
             try
