@@ -1,13 +1,16 @@
 ﻿using ppc.Commands;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 
 namespace ppc
 {
-    class Program
+    static class Program
     {
+        public static readonly string Name = Process.GetCurrentProcess().ProcessName;
+
         static void Main(string[] args)
         {
             if (args.Length == 0)
@@ -29,12 +32,12 @@ namespace ppc
             }
             catch(FileNotFoundException)
             {
-                Console.WriteLine("Started recording command history in 'ppc.history.xml'");
+                Console.WriteLine($"Started recording command history in '{Name}.history.xml'");
             }
             catch (Exception exc)
             {
                 Console.WriteLine(
-                "The read history of commands from 'ppc.history.xml' failed: {0} StackTrace: {1}",
+                $"The read history of commands from '{Name}.history.xml' failed: {0} StackTrace: {1}",
                 exc.Message, exc.StackTrace);
             }
             finally
@@ -125,7 +128,7 @@ namespace ppc
                     break;
 
                 default:
-                    Console.WriteLine($"'{args.First()}' is not a command. See '<program-name> help'.");
+                    Console.WriteLine($"'{args.First()}' is not a command. See '{Name} help'.");
                     return;
             }
 
@@ -167,7 +170,7 @@ namespace ppc
 
         private static Invoker ReadInvoker()
         {
-            using (FileStream reader = new FileStream("ppc.history.xml", FileMode.Open))
+            using (FileStream reader = new FileStream($"{Name}.history.xml", FileMode.Open))
             {
                 DataContractSerializer serializer = new DataContractSerializer(typeof(Invoker));
                 return (Invoker)serializer.ReadObject(reader);
@@ -176,7 +179,7 @@ namespace ppc
 
         private static void WriteInvoker(Invoker invoker)
         {
-            using (FileStream writer = new FileStream("ppc.history.xml", FileMode.Create))
+            using (FileStream writer = new FileStream($"{Name}.history.xml", FileMode.Create))
             {
                 DataContractSerializer serializer = new DataContractSerializer(typeof(Invoker));
                 serializer.WriteObject(writer, invoker);

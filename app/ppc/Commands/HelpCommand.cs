@@ -7,7 +7,7 @@ namespace ppc.Commands
         public void Execute()
         {
             Console.WriteLine(
-                "Usage: ppc <command> [<args>]\n\n" +
+                $"Usage: {Program.Name} <command> [<args>]\n\n" +
                 "This utility works with Windows registry keys in\n" +
                 "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\n" +
                 "Allowing to create application launch rules with a given cpu priority level\n\n" +
@@ -23,7 +23,7 @@ namespace ppc.Commands
                 $"{"",-10} {"",-15} {"Reads all keys with their values and outputs them to the console.",-20}\n\n" +
                 $"{"undo",-10} {"",-15} {"undo",-20}\n" +
                 $"{"",-10} {"",-15} {"Cancels the Create, Delete, Update command.",-20}\n" +
-                $"{"",-10} {"",-15} {"The history of commands is stored in \"ppc.history.xml\"",-20}\n\n" +
+                $"{"",-10} {"",-15} {$"The history of commands is stored in \"{Program.Name}.history.xml\"",-20}\n\n" +
                 $"{"help",-10} {"h",-15} {"help",-20}\n" +
                 $"{"",-10} {"",-15} {"Calls the current help.",-20}\n\n" +
                 "If no extension is specified in <file name>, the default will be used: \".exe\"\n" +
@@ -35,7 +35,7 @@ namespace ppc.Commands
                 $"{"RealTime",-12} {"4",-15}\n" +
                 $"{"BelowNormal",-12} {"5",-15}\n" +
                 $"{"AboveNormal",-12} {"6",-15}\n\n" +
-                "Example: 'create cmd.exe high' or 'c cmd 3'"
+                $"Example: '{Program.Name} create cmd.exe high' or '{Program.Name} c cmd 3'"
                 );
         }
     }
