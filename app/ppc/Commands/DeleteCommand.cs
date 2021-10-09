@@ -7,7 +7,7 @@ namespace ppc.Commands
     class DeleteCommand : ICancelable
     {
         [DataMember]
-        private string _key;
+        private readonly string _key;
         [DataMember]
         private CpuPriorityLevel _oldPriorityLevel;
 
@@ -15,7 +15,7 @@ namespace ppc.Commands
         {
             if (key == null)
             {
-                throw new ArgumentNullException("The key value is null");
+                throw new ArgumentNullException(nameof(key), "The key value is null");
             }
 
             _key = key.Contains(".") ? key : key + ".exe";

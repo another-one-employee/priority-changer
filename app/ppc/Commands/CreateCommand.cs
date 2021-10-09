@@ -7,15 +7,15 @@ namespace ppc.Commands
     class CreateCommand : ICancelable
     {
         [DataMember]
-        private string _key;
+        private readonly string _key;
         [DataMember]
-        private CpuPriorityLevel _priorityLevel;
+        private readonly CpuPriorityLevel _priorityLevel;
 
         public CreateCommand(string key, int priorityLevel)
         {
             if (key == null)
             {
-                throw new ArgumentNullException("The key value is null");
+                throw new ArgumentNullException(nameof(key), "The key value is null");
             }
 
             _key = key.Contains(".") ? key : key + ".exe";
