@@ -42,10 +42,7 @@ namespace ppc
             }
             finally
             {
-                if (invoker == null)
-                {
-                    invoker = new Invoker();
-                }
+                invoker ??= new Invoker();
             }
 
             int level;
@@ -146,17 +143,14 @@ namespace ppc
 
         private static bool TryParseCpuLevelStringToInt(string value, out int result)
         {
-            CpuPriorityLevel temp;
-            if (Enum.TryParse(value, true, out temp))
+            if (Enum.TryParse(value, true, out CpuPriorityLevel temp))
             {
                 result = (int)temp;
                 return true;
             }
-            else
-            {
-                result = 0;
-                return false;
-            }
+
+            result = 0;
+            return false;
         }
 
         private static string ExtractingKeyFromArguments(string[] args, int countOfCommandWords, int countOfOtherArgs)
@@ -165,25 +159,21 @@ namespace ppc
                 .TakeWhile((x, i) => i != args.Length - countOfOtherArgs)
                 .Skip(countOfCommandWords);
 
-            return String.Join(" ", temp);
+            return string.Join(" ", temp);
         }
 
         private static Invoker ReadInvoker()
         {
-            using (FileStream reader = new FileStream($"{Name}.history.xml", FileMode.Open))
-            {
-                DataContractSerializer serializer = new DataContractSerializer(typeof(Invoker));
-                return (Invoker)serializer.ReadObject(reader);
-            }
+            using var reader = new FileStream($"{Name}.history.xml", FileMode.Open);
+            var serializer = new DataContractSerializer(typeof(Invoker));
+            return (Invoker)serializer.ReadObject(reader);
         }
 
         private static void WriteInvoker(Invoker invoker)
         {
-            using (FileStream writer = new FileStream($"{Name}.history.xml", FileMode.Create))
-            {
-                DataContractSerializer serializer = new DataContractSerializer(typeof(Invoker));
-                serializer.WriteObject(writer, invoker);
-            }
+            using var writer = new FileStream($"{Name}.history.xml", FileMode.Create);
+            var serializer = new DataContractSerializer(typeof(Invoker));
+            serializer.WriteObject(writer, invoker);
         }
     }
 }
