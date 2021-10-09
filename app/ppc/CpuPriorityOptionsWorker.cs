@@ -7,12 +7,12 @@ namespace ppc
 {
     public static class CpuPriorityOptionsWorker
     {
-        private static readonly RegistryKey _workingKey = Registry.LocalMachine.OpenSubKey(
+        private static readonly RegistryKey WorkingKey = Registry.LocalMachine.OpenSubKey(
             @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options", true);
 
         private static RegistryKey GetPerfOptions(string key)
         {
-            RegistryKey perfOptions = _workingKey.OpenSubKey(key + @"\PerfOptions", true);
+            RegistryKey perfOptions = WorkingKey.OpenSubKey(key + @"\PerfOptions", true);
 
             if (perfOptions == null)
             {
@@ -44,17 +44,17 @@ namespace ppc
 
         public static void Create(string key, CpuPriorityLevel priorityLevel)
         {
-            RegistryKey subKey = _workingKey.CreateSubKey(key);
-            RegistryKey perfOptions = subKey.CreateSubKey("PerfOptions");
+            RegistryKey subKey = WorkingKey.CreateSubKey(key);
+            RegistryKey perfOptions = subKey?.CreateSubKey("PerfOptions");
 
-            perfOptions.SetValue("CpuPriorityClass", priorityLevel, RegistryValueKind.DWord);
-            perfOptions.Close();
+            perfOptions?.SetValue("CpuPriorityClass", priorityLevel, RegistryValueKind.DWord);
+            perfOptions?.Close();
         }
 
         public static CpuPriorityLevel Delete(string key)
         {
             var priorityLevel = GetCpuPriorityLevel(key);
-            _workingKey.DeleteSubKeyTree(key, true);
+            WorkingKey.DeleteSubKeyTree(key, true);
 
             return priorityLevel;
         }
@@ -63,22 +63,32 @@ namespace ppc
         {
             var oldPriorityLevel = GetCpuPriorityLevel(key);
             
-            RegistryKey perfOptions = _workingKey.OpenSubKey(key + @"\PerfOptions", true);
-            perfOptions.SetValue("CpuPriorityClass", priorityLevel, RegistryValueKind.DWord);
-            perfOptions.Close();
+            RegistryKey perfOptions = WorkingKey.OpenSubKey(key + @"\PerfOptions", true);
+            perfOptions?.SetValue("CpuPriorityClass", priorityLevel, RegistryValueKind.DWord);
+            perfOptions?.Close();
 
             return oldPriorityLevel;
         }
 
         public static Dictionary<string, string> ReadAll()
         {
-            return _workingKey
+            return WorkingKey
                 .GetSubKeyNames()
-                .Where(subKey => _workingKey.OpenSubKey(subKey + @"\PerfOptions") != null)
-                .Where(subKey => _workingKey
-                    .OpenSubKey(subKey + @"\PerfOptions")
-                    .GetValueNames()
-                    .Contains("CpuPriorityClass"))
+                .Where(subKey => WorkingKey.OpenSubKey(subKey + @"\PerfOptions") != null)
+                .Where(subKey =>
+                {
+                    var perfOptionsKey = WorkingKey
+                        .OpenSubKey(subKey + @"\PerfOptions");
+
+                    if (perfOptionsKey == null)
+                    {
+                        return false;
+                    }
+
+                    return perfOptionsKey
+                        .GetValueNames()
+                        .Contains("CpuPriorityClass");
+                })
                 .Select(s =>
                 {
                     string cpuLvl = null;
@@ -92,10 +102,7 @@ namespace ppc
                     }
                     finally
                     {
-                        if (cpuLvl == null)
-                        {
-                            cpuLvl = "Undefined";
-                        }
+                        cpuLvl ??= "Undefined";
                     }
 
                     return Tuple.Create(s, cpuLvl);
