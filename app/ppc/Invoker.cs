@@ -50,7 +50,7 @@ namespace ppc
                 throw new InvalidOperationException("History commands is empty");
             }
             var command = _command as ICancelable;
-            command.Undo();
+            command?.Undo();
         }
     }
 }
