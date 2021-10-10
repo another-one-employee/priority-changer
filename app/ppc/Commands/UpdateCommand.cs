@@ -7,7 +7,7 @@ namespace ppc.Commands
     class UpdateCommand : ICancelable
     {
         [DataMember]
-        private string _key;
+        private readonly string _key;
         [DataMember]
         private CpuPriorityLevel _oldPriorityLevel;
         private readonly CpuPriorityLevel _priorityLevel;
